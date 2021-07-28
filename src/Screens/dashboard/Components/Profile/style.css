@@ -1,0 +1,13 @@
+.user-profile {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 3px var(--first-color) solid;
+}
+
+.profile-component-container {
+    display: grid;
+    grid-template-columns: 1fr auto 2fr;
+    column-gap: .2rem;
+    align-items: center;
+}
