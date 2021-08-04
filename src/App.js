@@ -3,7 +3,8 @@ import Header from './Components/Header'
 import {
     Switch,
     Route,
-    Redirect
+    Redirect,
+    withRouter
 } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Dashboard from './Screens/dashboard' 
@@ -12,6 +13,9 @@ import SignUpComponent from './Screens/auth/signup'
 import PhoneComponent from './Screens/auth/signup/phone'
 import PhoneVerifyComponent from './Screens/auth/signup/phone_verify'
 import HomeComponent from './Screens/Home';
+// import { auth } from './assets/fireconfig'
+import { validateToken } from './assets/utils/token';
+import { SIGNOUT } from './store/actions/UserActions/action-types';
 
 
 const RootApp = (props) => {
@@ -32,61 +36,58 @@ const RootApp = (props) => {
     )
 }
 
-class App extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            loggedInStatus: false,
-            user: {}
-        }
-    }
+const App = (props) => {
     // myite@ourearth.com
     // S3cr3tp4sswo4rd@
-    componentDidMount(){
-        if(this.props.user){
-            this.setState({
-                user: this.props.user,
-                loggedInStatus: this.props.user.loggedIn //Temp Switch LoggedIn State
-            })
+    const [loggedInStatus, setLoggedInStatus] = React.useState(true);
+    const contraband = ['LOADING', 'access_token', null, undefined]
+
+    React.useEffect(() => {
+        // props.nullify()
+        if(props.user?.access_token){
+            props.refresh(props.user?.access_token)
+            setLoggedInStatus(props.user != null && props.user !== undefined)        
         }
-    }
+    }, [props])
 
-    render(){
-        return (
-            <>
-            <Switch>
-                {
-                    this.state.loggedInStatus?
-                    <>
-                        <Route path="/dashboard" render={props => (
-                            <Dashboard {...this.state} loggedInStatus={this.state.loggedInStatus} />
-                        )} />
-                        <Route component={() => <Redirect to="/dashboard" />} />
-                    </>
-                    :
-                    <>
-                        <Route exact={this.state.loggedInStatus} path="/" render={props => (
-                            <RootApp {...props} loggedInStatus={this.state.loggedInStatus} />
-                        )} />
-                        <Route component={() => <Redirect to="/home" />} />
-
-                    </>
-                }
-            </Switch>
-            </>
-        )
-    }
+    return (
+        <>
+        {
+            !contraband.includes(props.user)? <Redirect to="/dashboard" /> : <Redirect to="/home" />
+        }
+        <Switch>
+            <Route path="/" exact={!contraband.includes(props.user)}  render={ prop => (
+                <RootApp {...props} loggedInStatus={loggedInStatus} />
+            )} />
+            
+            <Route path="/dashboard" render={ prop => (
+                <Dashboard {...props} loggedInStatus={loggedInStatus} />
+            )} />
+        </Switch>
+    </>
+    )
 }
 
 const mapStateToProps = ( state ) => {
-    console.log(state.user.data)
     return {
         user: state.user.data
     } 
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        refresh: (token) => dispatch(validateToken(token)),
+        nullify: () => dispatch({
+            type: SIGNOUT,
+            payload: null,
+            error:null
+
+        })
+    }
+}
 
 
 
-export default connect(mapStateToProps, null)(App)
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
 

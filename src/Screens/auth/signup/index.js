@@ -1,21 +1,57 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { loginUser } from '../../../store/actions/UserActions/action-creators';
+import { createNewUser } from '../../../store/actions/UserActions/action-creators';
 import '../style.css'
 import * as Unicons from '@iconscout/react-unicons';
 import { Link } from 'react-router-dom';
 import { Redirect }  from 'react-router-dom'
+import * as actions from '../../../store/actions/UserActions/action-types'
+import Badges from '../../../Components/Badges';
+
 
 const SignUpComponent = ( props ) => {
 
     const [ email, setEmail ] = React.useState("")
     const [ password, setPassword ] = React.useState("")
     const [ name, setName ] = React.useState("")
+    const [ error, setError] = React.useState(null)
 
 
     React.useEffect(() => {
+        if(props.user){
+            <Redirect from="" to="dashboard" noThrow />
+        }
 
-    },[])
+        if(props.error != null){
+            if(props.error?.code === 'bad-password-format'){
+                setError({ 
+                    header: 'Bad Password Format', 
+                    msg: 'Password must be atlease 8 characters, and \n must contain, characters in uppercase [A-Z], \n lowercase [a-z] , \n numeric values [0-9] and \n one of the following symbols [@#$%^&+=_]',
+                    status: "multiline-error"
+                })
+            }
+
+            if(props.error?.code === 'auth-error'){
+                setError({ 
+                    header: 'Authentication Error', 
+                    msg: props.error.message,
+                    status: "multiline-error"
+                })
+            }
+
+            if(props.error?.stack === "TypeError: Failed to fetch"){
+                setError({ 
+                    header: 'Network Error', 
+                    msg: "Trouble connecting to server, please check your connection and try again",
+                    status: "multiline-error"
+                })
+            }
+            setTimeout(() => {
+                setError(null)
+            }, 5000)
+        }
+
+    },[props])
 
     const getEmail = (e) => {
         const email = e.target
@@ -25,8 +61,7 @@ const SignUpComponent = ( props ) => {
 
     const getfullName = (e) => {
         const name  = e.target
-
-        setName(validator(name.value, name.name))
+        setName(name.value)
     }
 
     const getPassword = (e) => {
@@ -47,12 +82,18 @@ const SignUpComponent = ( props ) => {
 
     const handleSignup = (e) => {
         const contraband = [null, "", undefined]
-        console.log(email, password)
         e.preventDefault()
 
         // return (<Redirect to="/phone" />)
+        !contraband.includes(email) && !contraband.includes(password) && !contraband.includes(name) ? 
+            props.createNewUser({
+                display_name: name,
+                email,
+                password
+            }) 
+        : alert(" Design Error Component to handle this error ");
 
-        return !contraband.includes(email) && !contraband.includes(password) && !contraband.includes(name) ? null : alert(" Design Error Component to handle this error ")
+        return <Redirect to="/dashboard" />
     }
 
 
@@ -60,6 +101,8 @@ const SignUpComponent = ( props ) => {
     return (
         <div className="container login-container">
             {/* -------------- Container ----------------- */}
+            {error? <Badges message={error.msg} header={error.header} status={error.status} /> : null} 
+
             <div className="contents">
 
                 <div className="left">
@@ -140,15 +183,16 @@ const SignUpComponent = ( props ) => {
 }
 
 const mapStateToProps = ( state ) => {
-    console.log(state.user.data)
+    console.log(state.user)
     return {
-        user: state.user.data
+        user: state.user.data,
+        error: state.user.error
     } 
 }
 
 const mapDispatchToProps = ( dispatch ) => {
     return {
-        login: (email, password) => dispatch(loginUser({ email: email, password: password}))
+        createNewUser: ({email, password, display_name}) => dispatch(createNewUser({ email, password, display_name })),
     } 
 }
 

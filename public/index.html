@@ -86,10 +86,16 @@ navLink.forEach( n => n.addEventListener('click', linkAction))
 
 let btn = document.querySelector("#menu-bar")
 let sidebar = document.querySelector(".sidebar")
+let maindash = document.querySelector(".dashboard-main-content")
 
 btn.onclick = function(){
   sidebar.classList.toggle("active");
+  maindash.classList.toggle("active")
 }
+
+
+// ================== Hide/ Show BADGE ===============
+// let badge = document.querySelector(".badge")
 
 
 </script>

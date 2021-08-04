@@ -4,16 +4,40 @@ import { loginUser } from '../../../store/actions/UserActions/action-creators';
 import '../style.css'
 import * as Unicons from '@iconscout/react-unicons';
 import { Link } from 'react-router-dom';
+import * as actions from '../../../store/actions/UserActions/action-types';
+import Badges from '../../../Components/Badges';
+
 
 const LoginComponent = ( props ) => {
 
     const [ email, setEmail ] = React.useState("")
     const [ password, setPassword ] = React.useState("")
+    const [ error, setError ] = React.useState(null)
 
 
     React.useEffect(() => {
+        if(props.error != null){
+            if(props.error?.code === 'auth/argument-error'){
+                setError({ 
+                    status: 'error',
+                    message: 'Invalid login credentials'
+                })
+            }
 
-    },[])
+            if(props.error?.stack === "TypeError: Failed to fetch"){
+                setError({ 
+                    header: 'Network Error', 
+                    message: "Trouble connecting to server, please check your connection and try again",
+                    status: "multiline-error"
+                })
+            }
+
+            setTimeout(() => {
+                setError(null)
+            }, 3000)
+        }
+       
+    },[props])
 
     const getEmail = (e) => {
         const email = e.target
@@ -40,8 +64,11 @@ const LoginComponent = ( props ) => {
     const handleLogin = (e) => {
         const contraband = [null, "", undefined]
         console.log(email, password)
-        !contraband.includes(email) && !contraband.includes(password) ? props.login(email, password) : alert(" Design Error Component to handle this error ")
         e.preventDefault()
+
+        !contraband.includes(email) && !contraband.includes(password) ? 
+            props.login(email, password) 
+        : alert(" Design Error Component to handle this error ")
     }
 
 
@@ -49,6 +76,7 @@ const LoginComponent = ( props ) => {
     return (
         <div className="container login-container">
             {/* -------------- Container ----------------- */}
+            {error? <Badges message={error.message} status={error.status} header={error.header} /> : null} 
             <div className="contents">
 
                 <div className="left">
@@ -106,7 +134,7 @@ const LoginComponent = ( props ) => {
                                 </div>
 
                                 <div className="signup-section"> 
-                                    <Link to="#" className="signup-link">
+                                    <Link to="/signup" className="signup-link">
                                         create a new <span> Pickr Buisness Account </span>
                                     </Link>
                                 </div>
@@ -124,15 +152,16 @@ const LoginComponent = ( props ) => {
 }
 
 const mapStateToProps = ( state ) => {
-    console.log(state.user.data)
+    console.log('LOGIN: ',state.user)
     return {
-        user: state.user.data
+        user: state.user.data,
+        error: state.user.error
     } 
 }
 
 const mapDispatchToProps = ( dispatch ) => {
     return {
-        login: (email, password) => dispatch(loginUser({ email: email, password: password}))
+        login: (email, password) => dispatch(loginUser({ email: email, password: password})),
     } 
 }
 

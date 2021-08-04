@@ -232,6 +232,7 @@
 .input-submit:disabled {
     background-color: #dedede;
     color: #8d8d8d;
+    cursor: not-allowed;
 }
 .loader {
     background-color: red;

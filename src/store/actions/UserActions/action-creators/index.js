@@ -1,19 +1,18 @@
 import * as actions from "../action-types";
-import User from '../../../../Entities/UserObjects'
+import { Auth } from '../../../../Entities/UserObjects'
 
 export const loginUser = ( user ) => {
     return ( dispatch ) => {
-        const currentUser = new User();
+        const currentUser = new Auth();
         dispatch({
             type: actions.LOADING,
             payload: actions.LOADING,
             error: null
         })
-        currentUser.loginWithEmailAndPassword(user.email, user.password).then(() => {
-            console.log('DATA:', currentUser.to_json())
+        currentUser.loginWithEmailAndPassword(user.email, user.password).then( data => {
             dispatch({
                 type: actions.SIGNIN,
-                payload: currentUser.to_json(),
+                payload: currentUser.grab_token(),
                 error: null,
             })
         }).catch( err => {
@@ -40,5 +39,53 @@ export const changeTheme = ( currentTheme ) => {
                 error: null
             })
         }
+    }
+}
+
+
+export const logout = ( ) => {
+    return ( dispatch ) => {
+        const currentUser = new Auth();
+
+        currentUser.signOut().then(() => {
+            dispatch({
+                type: actions.SIGNOUT,
+                payload: null,
+                error: null,
+            })
+        }).catch(error => {
+            dispatch({
+                type: actions.ERROR,
+                payload: null,
+                error: error,
+            })
+        })
+    }
+}
+
+
+export const createNewUser = ( data ) => {
+    return (dispatch) => {
+
+        dispatch({
+            type: actions.LOADING,
+            payload: actions.LOADING,
+            error: null
+        })
+        
+        const currentUser = new Auth();
+        currentUser.createUserWithEmailAndPassword( data ).then(() => {
+            dispatch({
+                type:actions.SIGNIN,
+                payload: currentUser.grab_token(),
+                error: null
+            })
+        }).catch(err => {
+            dispatch({
+                type:actions.ERROR,
+                payload: null,
+                error: err
+            })
+        })
     }
 }

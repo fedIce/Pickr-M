@@ -29,7 +29,7 @@ export const SideBarBottomData = [
         id: 2,
         title: "Log out",
         icon: <Unicon.UilSignout className="sidebar_icons" />,
-        path: "/dashboard/signout",
+        path: "#",
         cName: "dash_nav_item"
     }
 ]

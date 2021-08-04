@@ -75,7 +75,6 @@ const Header = (props) => {//#region
 }//#endregion
 
 const mapStateToProps = ( state ) => {
-    console.log('STATE: ', state.user)
     return {
         theme: state.theme
     } 
