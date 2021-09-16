@@ -13,9 +13,10 @@ import SignUpComponent from './Screens/auth/signup'
 import PhoneComponent from './Screens/auth/signup/phone'
 import PhoneVerifyComponent from './Screens/auth/signup/phone_verify'
 import HomeComponent from './Screens/Home';
-// import { auth } from './assets/fireconfig'
+import { loadRestaurantMenus } from '../src/store/actions/RestaurantActions/action-creators'
 import { validateToken } from './assets/utils/token';
 import { SIGNOUT } from './store/actions/UserActions/action-types';
+
 
 
 const RootApp = (props) => {
@@ -44,9 +45,10 @@ const App = (props) => {
 
     React.useEffect(() => {
         // props.nullify()
+
         if(props.user?.access_token){
             props.refresh(props.user?.access_token)
-            setLoggedInStatus(props.user != null && props.user !== undefined)        
+            setLoggedInStatus(props.user != null && props.user !== undefined)    
         }
     }, [props])
 
@@ -70,7 +72,8 @@ const App = (props) => {
 
 const mapStateToProps = ( state ) => {
     return {
-        user: state.user.data
+        user: state.user.data,
+        menus: state.menus
     } 
 }
 
@@ -82,7 +85,8 @@ const mapDispatchToProps = (dispatch) => {
             payload: null,
             error:null
 
-        })
+        }),
+        loadMenus: () => dispatch(loadRestaurantMenus())
     }
 }
 

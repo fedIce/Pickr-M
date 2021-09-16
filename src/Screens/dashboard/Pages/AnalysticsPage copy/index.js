@@ -1,5 +1,5 @@
 import React from 'react'
-import { RestaurantCard, AddNewCard } from '../../Components/Card';
+import { RestaurantCard, AddNewCard } from '../../Components/MenuComponents';
 
 
 function AccountPage(props) {

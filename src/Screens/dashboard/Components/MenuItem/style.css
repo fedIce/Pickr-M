@@ -1,0 +1,106 @@
+.menuitem-component-container {
+    display: flex;
+    flex-direction: row;
+    max-height: 200px;
+    overflow: hidden;
+    background-color: var(--card-color);
+    box-shadow: var(--card-shadow);
+    border-radius: 5px;
+    margin: 5px 0px;
+}
+
+.menuitem-img-container {
+    height: 100%;
+    width: 33%;
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    position: relative;
+}
+
+.menuitem-img{
+    height: auto;
+    resize: both;
+    image-rendering: optimizeSpeed;
+}
+
+.menuitem-img-details {
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-direction: column;
+    background: rgba(2,0,36, 0);
+    background: linear-gradient(356deg, rgba(0,0,0,.8) 30%, rgba(0,212,255,0) 100%);
+    padding: 20px;
+}
+
+.menuitem-img-details #title {
+    font-size: var(--h2-font-size);
+    color: #fff;
+    font-weight: 500;
+}
+
+.menuitem-img-details #sold {
+    display: flex;
+    align-items: center;
+}
+
+.menuitem-img-details #rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.menuitem-desc-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 60%;
+    padding: 20px;
+    padding-top: 0;
+}
+
+.menuitem-action-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--card-color);
+    /* background-color: rgba(241,249,245, 1); */
+    width: 7%;
+    padding: 10px 0;
+}
+
+#mi-d-cat {
+    font-size: 1rem;
+    margin: 1rem 0px;
+    color: var(--first-color)
+}
+
+.mi-d-cat-title {
+    margin: 0px 1rem;
+    margin-left: 0;
+}
+
+.mi-d-cat-items span {
+    margin: 0px .5rem;
+    font-size: .7rem;
+    color: #fff;
+    background-color: #2eb374;
+    border-radius: 10px;
+    padding: 5px 15px;
+}
+
+.mi-d-mis {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

@@ -5,6 +5,9 @@ import {
     UserReducer
 } from './reducers/userReducer';
 import {
+    MenusReducer
+} from './reducers/restaurantReducers';
+import {
     themeReducer
 } from './reducers/themeReducer';
 
@@ -16,7 +19,8 @@ const persistConfig = {
 
 const RootReducer = combineReducers({
     user: UserReducer,
-    theme: themeReducer
+    theme: themeReducer,
+    menus: MenusReducer
 })
 
 export default persistReducer(persistConfig, RootReducer)

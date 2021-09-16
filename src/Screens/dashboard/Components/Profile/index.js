@@ -14,8 +14,8 @@ export default class UserProfile extends Component {
         return (
             <div className="profile-component-container">
                 <Unicons.UilAngleDown />
-                <span> {this.props.user.display_name} </span>
-                <img src={this.props.user.photo_url} className="user-profile" alt="profile" />
+                <span> {this.props.user? this.props.user.display_name : (<div className="skeleton text-loading"></div>)} </span>
+                {this.props.user? <img src={this.props.user.photo_url} className="user-profile" alt="profile" />: (<div className="skeleton circle-loading"></div>)}
             </div>
         )
     }

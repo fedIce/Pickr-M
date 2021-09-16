@@ -1,7 +1,7 @@
 import { auth } from '../../assets/fireconfig'
 import { encrypt, email_verify } from '../../assets/utils/cry'
 
-const PORT = 5000;
+const PORT = 5100;
 const SERVER_URL = `http://localhost:${PORT}`;
 
 

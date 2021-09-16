@@ -10,6 +10,8 @@ function SideBar( props ) {
         if(item.id === 2){
             props.logout();
             return (<Redirect to="/home" />)
+        }else{
+            props.activeScreen({screen: item.title})
         }
     }
 
@@ -31,7 +33,7 @@ function SideBar( props ) {
                 {
                     SideBarData.map((item, index) => (
                         <li key={index}>
-                            <Link to={item.path}>
+                            <Link onClick={() => props.activeScreen({screen: item.title})} to={item.path}>
                             <i>{item.icon}</i>
                                 <span className="links_name">{item.title}</span>
                             </Link>

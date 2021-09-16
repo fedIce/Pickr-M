@@ -8,6 +8,8 @@ import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react'
 import RootReducer from './store/store';
 import thunk from 'redux-thunk'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 // import '../public/assets/css/index.css'
 
 const store = createStore( RootReducer, {} , applyMiddleware(thunk) )
@@ -18,7 +20,9 @@ ReactDOM.render(
         <Provider store={ store } >
             <PersistGate persistor={persistor}>
                 <Router>
-                    <App/>
+                    <DndProvider backend={HTML5Backend}>
+                        <App/>
+                    </DndProvider>
                 </Router>
             </PersistGate>
         </Provider>
